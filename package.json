@@ -4,7 +4,8 @@
   "description": "Little platform for demoing vizualization with data and data transformations",
   "main": "demo.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "author": "Sigfried Gold",
   "license": "MIT",
@@ -16,5 +17,22 @@
     "node-simple-router": "^0.9.4-2",
     "serve-index": "^1.6.4",
     "serve-static": "^1.9.3"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sigfried/viz-demo.git"
+  },
+  "keywords": [
+    "d3",
+    "supergroup",
+    "nest",
+    "visualization",
+    "data",
+    "demo"
+  ],
+  "bugs": {
+    "url": "https://github.com/Sigfried/viz-demo/issues"
+  },
+  "homepage": "https://github.com/Sigfried/viz-demo"
 }
