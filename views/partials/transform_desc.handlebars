@@ -1,13 +1,7 @@
 
 
-<img src="{{thumbnail}}" width="80px" height="80px"/ style="float:left">
-<div style="float:left">
-{{name}}, {{author}} <br/>
-Source: <a href="{{source}}">{{source}}</a> <br/>
-Data expected: {{dataExpected}}
+<div>
+    <button onclick="loadTransform('{{file}}')">{{name}}</button> <br/>
+    {{#if viz}}Works with {{viz}}{{/if}} <br/>
+    {{description}}
 </div>
-<div style="clear:both"/>
-
-
-
-<pre>{{loadText './viz_examples/treemap_d3_example.html'}}</pre>

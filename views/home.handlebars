@@ -1,5 +1,3 @@
-<h1>Example App: Home</h1>
-
 <a href="viz_list">List visualization demos</a>
 
 {{wholequery}}
@@ -12,10 +10,6 @@
     {{>viz_list vizList}}
 {{/if}}
 <hr/>
-{{#if query.dataset}}
-    Data set:<br/>
-    {{>data_desc dataset}}
-{{else}}
-    Data set list:<br/>
-    {{>data_list datasetList}}
-{{/if}}
+<div id="datasets"></div>
+<hr/>
+<div id="transforms"></div>

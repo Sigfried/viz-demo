@@ -2,7 +2,7 @@
 <button id='load-data'>Load Data</button>
 <ul>
 {{#each this}}
-    <li>
+    <li id="{{file}}" class="data-desc">
         <input type="checkbox" value="{{file}}" />
         {{>data_desc}}
     </li>

@@ -5,6 +5,7 @@ var _ = require('lodash');
 
 var app = express();
 app.use('/', express.static('.'));
+app.use('/viz_transforms', express.static('viz_transforms'));
 
 var hbs = exphbs.create({
     helpers: {
@@ -25,11 +26,13 @@ app.get('/', function (req, res) {
     } else {
         context.vizList = getVizList();
     }
+    /*
     if (req.query.dataset) {
         context.dataset = getVizList(req.query.dataset)[0];
     } else {
         context.datasetList = getDatasetList();
     }
+    */
     //console.log(context);
     res.render('home', context);
 });
@@ -44,6 +47,7 @@ function getVizList(viz) {
         return config;
     });
 };
+/*
 function getDatasetList(filename) {
     var list = getJson('data/list.json');
     if (filename) {
@@ -55,6 +59,7 @@ function getDatasetList(filename) {
     });
     return list;
 };
+*/
 function getJson(path) {
     var c = fs.readFileSync(path, {encoding:'utf8'});
     var json = JSON.parse(c);
