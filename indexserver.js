@@ -8,12 +8,13 @@ var serveIndex = require('serve-index')
 var st = require('connect-static-transform');
 var d3 = require('d3');
 var vm = require('vm');
+var url = require('url');
 
 var app = express();
 
 // handling 404 errors
 app.use(function(err, req, res, next) {
-    //console.log(err);
+    console.log(req.url);
     if(err.status !== 404) {
         return next();
     }
@@ -25,27 +26,32 @@ app.get('/data/:file', function(req, res, next) {
         if (err) {
             var error = new Error();
             error.status = 404;
+            console.log(req.params);
             //console.log('Error', error);
             return next(error);
         }
+        var blob = [{"a":1},{"a":2}];
+        console.log('test supergroup',_.supergroup([{"a":1},{"a":2}], 'a').rawValues());
         if (req.query.transform) {
-            //var script = vm.createScript(req.query.transform);
-            var script = vm.createScript('result=data[1]');
             console.log('SCRIPT', req.query.transform);
+            //var script = vm.createScript(req.query.transform);
             if (req.params.file.match(/\.csv$/)) {
-                var data = d3.csv.parse(data);
-                //console.log('DATA', [1,2,3], data[0]);
+                var csv = d3.csv.parse(data);
+                var sandbox = {blah: 1, data:csv, _:_, d3:d3 };
+                //console.log(sandbox);
+                //vm.createContext(sandbox);
+                var result = vm.runInNewContext(req.query.transform, sandbox);
                 //data = [1,2,3,4];
-                var sandbox = {"data":data};
+                //var sandbox = {"data":csv, result:'nothing'};
                 //var sandbox = {"data":[1,2,3,4,5]};
-                script.runInNewContext(sandbox);
-                data = sandbox.result;
+                //script.runInNewContext(sandbox);
+                //var result = sandbox.result;
+                console.log('Result', result);
+                res.send(result);
             }
-            console.log('DATA', data);
-            data = JSON.stringify(data);
+        } else {
+            res.send(data);
         }
-        //console.log('DATA', data);
-        res.send(data);
     })
 });
 
@@ -53,18 +59,22 @@ var staticfiles = express.static('viz_examples');
 
 //app.use(toUpperCase);
 app.get('/viz_examples/:file', function(req, res, next) {
-    var f = fs.readFile('viz_examples/' + req.params.file, 'utf8', function(err, data) {
+    var pathname = url.parse(req.url).pathname.substr(1);
+    console.log(pathname);
+    var f = fs.readFile(pathname, 'utf8', function(err, data) {
         console.log(req.params.file, err);
         if (err) {
             var error = new Error();
             error.status = 404;
+            console.log(url.parse(req.url));
             console.log('Error', error);
             return next(error);
         }
-        //console.log(req.query.replace);
+        //console.log(req.query.replace, '\n\n\n');
         //console.log(req.query.with);
         if (req.query.replace && req.query.with) {
-            var dataUrl = '"../data/' + req.query.with;
+            var dataUrl = '"/data/' + req.query.with;
+            console.log(dataUrl);
             if (req.query.transform) {
                 dataUrl += ('?transform=' + encodeURIComponent(req.query.transform));
             }
@@ -95,11 +105,23 @@ app.get('/viz_examples/:file', function(req, res, next) {
 
 app.use('/viz_examples', serveIndex('viz_examples', {'icons': true}))
 
-app.get('*', function(req, res, next) {
-  var err = new Error();
-  err.status = 404;
-  next(err);
+
+// from http://expressjs.com/advanced/developing-template-engines.html
+app.engine('ntl', function (filePath, options, callback) { // define the template engine
+  fs.readFile(filePath, function (err, content) {
+    if (err) return callback(new Error(err));
+    // this is an extremely simple template engine
+    var rendered = content.toString().replace('#title#', '<title>'+ options.title +'</title>')
+    .replace('#message#', '<h1>'+ options.message +'</h1>');
+    return callback(null, rendered);
+  })
 });
+app.set('views', './viz_examples'); // specify the views directory
+app.set('view engine', 'ntl'); // register the template engine
+
+app.get('/', function (req, res) {
+  res.render('index', { title: 'Hey', message: 'Hello there!'});
+})
  
 app.listen(3000)
 

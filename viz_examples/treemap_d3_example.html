@@ -50,8 +50,6 @@ var div = d3.select("body").append("div")
     .style("left", margin.left + "px")
     .style("top", margin.top + "px");
 
-    var test = 'd3.csv("../data/worldhealth.csv", function(data) { var cc = _.supergroup(data, "cc"); console.log(cc.map(String)); })';
-    eval(test);
 d3.json({{jsonfile||"flare.json"}}, function(error, root) {
   var node = div.datum(root).selectAll(".node")
       .data(treemap.nodes)
