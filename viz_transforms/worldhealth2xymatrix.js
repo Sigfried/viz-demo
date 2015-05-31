@@ -9,7 +9,7 @@ function(data) {
                     function(pair,i) {
                         return  i < 10 && pair[0].match(/^\d\d\d\d$/)
                     }).map(
-                        function(p){
+                        function(pair){
                             // x is the fieldname, which is the year, y is the value
                             return {x: parseInt(pair[0]), y: parseFloat(pair[1])}
                         }).value() 

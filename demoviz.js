@@ -6,14 +6,29 @@ d3.select('#datasets')
 d3.select('#transforms')
     .html(Handlebars.templates.transform_list(content.transformList))
 
-d3.select('#load-data')
-    .on('click', function() {
-        d3.selectAll('li.data-desc>input')
-            .each(function() {
-                if (!this.checked)
-                    d3.select(this.parentNode).remove();
-            })
-    });
+var loadedData = [];
+function loadData() {
+    loadedData = [];
+    d3.selectAll('li.data-desc>input')
+        .each(function() {
+            if (this.checked) {
+                var desc = this.parentNode;
+                var fname = desc.id;
+                var extension = fname.match(/\.([^.]+)$/)[1];
+                if (extension === 'csv') {
+                    d3.csv('/data/'+fname, function(data) {
+                        loadedData.push(data);
+                    });
+                } else if (extension === 'json') {
+                    d3.json('/data/'+fname, function(data) {
+                        loadedData.push(data);
+                    });
+                }
+            } else {
+                d3.select(this.parentNode).remove();
+            }
+        })
+};
 
 d3.selectAll('li.data-desc')
     .each(function() {
@@ -38,4 +53,11 @@ function loadTransform(file) {
         d3.select("#transform-code")
             .text(data.response);
     });
+}
+function transform() {
+    var code = d3.select("#transform-code").text();
+    var trans;
+    eval('trans = ' + code);
+    var out = trans.apply(null, loadedData);
+    d3.select("#output").text(JSON.stringify(out,null,2));
 }
