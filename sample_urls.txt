@@ -1,0 +1,9 @@
+http://localhost:3000/viz_examples/BostockStackedGroupedBars/index.html?replace=jsonfile&with=worldhealth.csv&transform=_.chain(data.slice(0,10)).map(function(d)%20{%20return%20_.chain(d).pairs().filter(function(p,i)%20{return%20%20i%20%3C%2010%20%26%26%20p[0].match(/^\d\d\d\d$/)}).map(function(p){return%20{x:parseInt(p[0]),y:parseFloat(p[1])}}).value()%20}).value()
+
+http://localhost:3000/viz_examples/BostockStackedGroupedBars/index.html?replace=jsonfile&with=worldhealth.csv&transform=_.chain(data.slice(0,10)).map(function(d)%20{%20return%20_.chain(d).pairs().filter(function(p,i)%20{return%20%20i%20%3C%2010%20%26%26%20p[0].match(/^\d\d\d\d$/)}).map(function(p){return%20{x:parseInt(p[0]),y:parseFloat(p[1])}}).value()%20}).value()
+
+
+
+
+not working:
+http://localhost:3000/viz_examples/treemap_d3_example.html?replace=jsonfile&with=worldhealth.csv&transform=_.supergroup(stuff,%27Country%20Name%27).asRootVal().flattenTree()

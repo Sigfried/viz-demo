@@ -1,0 +1,21 @@
+<h1>Example App: Home</h1>
+
+<a href="viz_list">List visualization demos</a>
+
+{{wholequery}}
+<hr/>
+{{#if query.viz}}
+    Visualization:<br/>
+    {{>viz_desc viz}}
+{{else}}
+    Visualization list:<br/>
+    {{>viz_list vizList}}
+{{/if}}
+<hr/>
+{{#if query.dataset}}
+    Data set:<br/>
+    {{>data_desc dataset}}
+{{else}}
+    Data set list:<br/>
+    {{>data_list datasetList}}
+{{/if}}

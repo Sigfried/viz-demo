@@ -1,0 +1,8 @@
+[
+    {
+        "name": "Worldhealth to 2-D array of (x,y) for Stacked Bar demo",
+        "viz": "BostockStackedGroupedBars",
+        "file": "worldhealth2xymatrix.js",
+        "description": "Not informationally useful, but transforms worldhealth datafile into something plottable by Stacked Bar demo."
+    }
+]

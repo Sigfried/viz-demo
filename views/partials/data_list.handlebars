@@ -1,0 +1,12 @@
+
+<button id='load-data'>Load Data</button>
+<ul>
+{{#each this}}
+    <li>
+        <input type="checkbox" value="{{file}}" />
+        {{>data_desc}}
+    </li>
+{{else}}
+    got nothing
+{{/each}}
+</ul>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="license" content="http://sigfried.mit-license.org/"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.js"></script>
+    <script src="./assets/lodash.js"></script>
+    <script src="./node_modules/supergroup/supergroup.js"></script>
+</head>
+<body>
+
+    get data from: <a href="http://databank.worldbank.org/data/views/variableselection/selectvariables.aspx?source=world-development-indicators"
+        >http://databank.worldbank.org/data/views/variableselection/selectvariables.aspx?source=world-development-indicators</a>
+
+    <a id="download">download processed</a>
+    <script>
+        d3.csv('./mysql_world_data_part.csv', function(world) {
+            var govtypes = _.indexBy(world,'Code');
+            var countries = {};
+            var fields = {};
+            d3.csv('./worldhealth.csv', function(health) {
+                _.each(health, function(countryIndicatorRec) { 
+                    var cc = countryIndicatorRec["Country Code"];
+                    var cn = countryIndicatorRec["Country Name"];
+                    var ind = countryIndicatorRec["Indicator Name"];
+                    var ic = countryIndicatorRec["Indicator Code"];
+                    fields[ind] = true;
+                    countries[cc] || (countries[cc] = {cc:cc, cn:cn, years: {}});
+                    _.extend(countries[cc], govtypes[cc]);
+                    var yearVals = _.pick(countryIndicatorRec, function(v,k,o) { 
+                        return !_.isNaN(parseInt(k)) });
+                    _.each(yearVals, function(val, year) {
+                        var o = countries[cc].years[year] || (countries[cc].years[year] = _.clone(countries[cc]));
+                        o.year = year;
+                        o[ind] = val;
+                    });
+                })
+                worldhealth = _.chain(countries).map(function(d) { return _.map(d.years,function(y) { delete y.years; return y }) } ).flatten().value()
+                console.log(worldhealth);
+
+                var csv = "data:text/csv;charset=utf-8,";
+                csv += d3.csv.format(worldhealth);
+                /*
+                fields = _.uniq(_.keys(fields).concat(_.keys(worldhealth[0])));
+                csv += fields.join(',') + '\n';
+                csv += _.map(worldhealth, function(row) {
+                    return _.map(fields, function(field) {
+                        return row[field];
+                    }).join(',');
+                }).join('\n');
+                */
+
+
+                var encodedUri = encodeURI(csv);
+                var dl = document.getElementById('download');
+                dl.setAttribute("href", encodedUri);
+                dl.setAttribute("download", "sample_data.csv");
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+[
+    {
+        "file": "OlympicAthletes.csv",
+        "source": "http://public.tableau.com/s/resources",
+        "sourceDescription": "I got this Olympic Athlete data from Tableau's trial software. There's other stuff at the link."
+    },
+    {
+        "file": "mysql_world_data.csv",
+        "source": "http://dev.mysql.com/doc/index-other.html",
+        "sourceDescription": "Joined together some tables from MySQL world sample database."
+    },
+    {
+        "file": "worldhealth.csv",
+        "source": "http://databank.worldbank.org/data/views/variableselection/selectvariables.aspx?source=world-development-indicators",
+        "sourceDescription": "Public World Bank health data. Grabbed a bunch of fields for a bunch of years for all the countries."
+    },
+    {
+        "file": "worldhealthplus.csv",
+        "source": "./makeSampleData.html",
+        "sourceDescription": "Combines World Bank data with MySQL sample data into an easier-to-use format."
+    }
+]
