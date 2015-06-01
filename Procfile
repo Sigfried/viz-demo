@@ -1,1 +1,1 @@
-web: node server.js
+web: bash ./build.sh && node server.js
