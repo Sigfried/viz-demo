@@ -39,7 +39,8 @@ form {
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
-var input = '{{jsonfile||NO_OUTSIDE_DATA}}';
+console.log('heelo?')
+console.log(window.opener.data);
 if (window.opener.data) {
     data = window.opener.data;
     n = data.length;
