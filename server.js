@@ -39,6 +39,9 @@ app.get('/', function (req, res) {
 app.get('/viz_list', function (req, res) {
     res.render('viz_list', getVizList(req.query.viz));
 });
+app.get('/viz_list_configs', function (req, res) {
+    res.send(getVizList(req.query.viz));
+});
 function getVizList(viz) {
     var vizDirs = viz ? [viz] : fs.readdirSync('viz_content');
     return _.map(vizDirs, function(vizDir) {

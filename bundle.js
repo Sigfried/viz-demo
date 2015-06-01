@@ -28992,6 +28992,11 @@ module.exports=[
         "viz": "BostockStackedGroupedBars",
         "file": "worldhealth2xymatrix.js",
         "description": "Not informationally useful, but transforms worldhealth datafile into something plottable by Stacked Bar demo."
+    },
+    {
+        "name": "No transformation",
+        "code": "function(d) { return d; }",
+        "description": "Returns data unchanged."
     }
 ]
 

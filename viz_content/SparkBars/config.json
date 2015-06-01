@@ -1,0 +1,10 @@
+{
+    "name": "Spark bars",
+    "index": "demo.html",
+    "author": "Sigfried Gold",
+    "source": ".",
+    "thumbnail": ".",
+    "description": "Little bar charts representing distribution of values in all fields",
+    "dataExpected": "Any csv file"
+}
+

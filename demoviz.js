@@ -3,6 +3,9 @@ Handlebars.partials = Handlebars.templates;
 
 content.query = queryString();
 content.vizChosen = content.query.viz;
+d3.json("/viz_list_configs", function(json) {
+    content.vizLists = json;
+});
 
 d3.select('#datasets')
     .html(Handlebars.templates.data_list(content.dataList))
@@ -52,11 +55,13 @@ d3.selectAll('li.data-desc')
         }
         //var config = _.find(content.dataList, {file:dd.id});
     });
-function loadTransform(file) {
-    d3.xhr('/viz_transforms/' + file, function(err, data) {
-        d3.select("#transform-code")
-            .text(data.response);
-    });
+function loadTransform(file, code) {
+    if (code)
+        d3.select("#transform-code").text(code);
+    else
+        d3.xhr('/viz_transforms/' + file, function(err, data) {
+            d3.select("#transform-code").text(data.response);
+        });
 }
 function transform() {
     var code = d3.select("#transform-code").node().value;
@@ -67,8 +72,10 @@ function transform() {
     window.data = out;
 }
 function runDemo() {
-    var demoUrl = "/viz_content/BostockStackedGroupedBars/index.html"
-        //+ content.vizChosen;
+    var demoUrl = "/viz_content/" + content.vizChosen
+            + '/' +
+            _.find(content.vizLists,{dir:content.vizChosen})
+            .index;
     var wnd = window.open(demoUrl, "Viz Demo Output", "_blank");
     //wnd.document.write('<html><body><script>alert("hi")</script>hello</body></html>');
     var qs = queryString();

@@ -64,17 +64,20 @@ templates['transform_desc'] = template({"1":function(depth0,helpers,partials,dat
     var helper;
 
   return "Works with "
-    + this.escapeExpression(((helper = (helper = helpers.viz || (depth0 != null ? depth0.viz : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"viz","hash":{},"data":data}) : helper)));
+    + this.escapeExpression(((helper = (helper = helpers.viz || (depth0 != null ? depth0.viz : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"viz","hash":{},"data":data}) : helper)))
+    + "<br/>";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1, helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
 
   return "\n\n<div>\n    <button onclick=\"loadTransform('"
     + alias3(((helper = (helper = helpers.file || (depth0 != null ? depth0.file : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"file","hash":{},"data":data}) : helper)))
+    + "','"
+    + alias3(((helper = (helper = helpers.code || (depth0 != null ? depth0.code : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"code","hash":{},"data":data}) : helper)))
     + "')\">"
     + alias3(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
     + "</button> <br/>\n    "
     + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.viz : depth0),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + " <br/>\n    "
+    + "\n    "
     + alias3(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"description","hash":{},"data":data}) : helper)))
     + "\n</div>\n";
 },"useData":true});

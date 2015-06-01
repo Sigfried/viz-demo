@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="license" content="http://sigfried.mit-license.org/"/>
+    <style>
+        body {
+              font: 10px sans-serif;
+          }
+
+          .axis path,
+          .axis line {
+            fill: none;
+              stroke: #000;
+                shape-rendering: crispEdges;
+            }
+
+            .x.axis path {
+              display: none;
+          }
+
+          .line {
+            fill: none;
+              stroke: steelblue;
+                stroke-width: 1.5px;
+            }
+        //svg { position: absolute; }
+    </style>
+
+</head>
+<body>
+
+<div style="position:relative;" class="viz"></div>
+    <script src="/bundle.js"></script>
+    <script src="./demo.js"></script>
+    <script>
+        displayContents(window.opener.data);
+    </script>
+</body>
+</html>
