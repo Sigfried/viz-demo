@@ -1,7 +1,7 @@
 
 <h5>Load transform code if you like, or start from scratch</h5>
 <ul>
-{{#each this}}
+{{#each transformList}}
     <li id="{{file}}" class="transform-desc">
         {{>transform_desc}}
     </li>
@@ -9,7 +9,9 @@
     got nothing
 {{/each}}
 </ul>
-<button onclick="transform()">Transform Data</button> <br/>
+<button onclick="transform()">Transform Data</button> 
+{{#if vizChosen}}<button onclick="runDemo()">Run Demo</button>{{/if}}
+<br/>
 <textarea rows="15" cols="150" id="transform-code" style="border:1px solid black">
 </textarea>
 <pre id="output"></pre>

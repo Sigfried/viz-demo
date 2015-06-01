@@ -40,25 +40,23 @@ form {
 <script>
 
 var input = '{{jsonfile||NO_OUTSIDE_DATA}}';
-if (input === 'NO_OUTSIDE_DATA') {
+if (window.opener.data) {
+    data = window.opener.data;
+    n = data.length;
+    m = data[0].length;
+    stack = d3.layout.stack();
+    layers = stack(data);
+    yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); });
+    yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
+} else {
     var n = 4, // number of layers
         m = 58, // number of samples per layer
         stack = d3.layout.stack(),
         layers = stack(d3.range(n).map(function() { return bumpLayer(m, .1); })),
         yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); }),
         yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
-    viz();
-} else {
-    d3.json(input, function(data) {
-        n = data.length;
-        m = data[0].length;
-        stack = d3.layout.stack();
-        layers = stack(data);
-        yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); });
-        yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
-        viz();
-    });
 }
+viz();
 
 function viz() {
 

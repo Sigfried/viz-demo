@@ -11,7 +11,8 @@ function(data) {
                     }).map(
                         function(pair){
                             // x is the fieldname, which is the year, y is the value
-                            return {x: parseInt(pair[0]), y: parseFloat(pair[1])}
+                            // the BostockStackedGroupedBars viz wants small numbers, so shifting years down to 0
+                            return {x: parseInt(pair[0]) - 1963, y: parseFloat(pair[1])}
                         }).value() 
             }).value();
 }
