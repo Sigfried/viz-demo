@@ -18,5 +18,10 @@
         "file": "worldhealthplus.csv",
         "source": "./makeSampleData.html",
         "sourceDescription": "Combines World Bank data with MySQL sample data into an easier-to-use format."
+    },
+    {
+        "file": "tree.csv",
+        "source": "",
+        "sourceDescription": "Tiny taxonomy for testing. Transform to tree (and inspect) like: _.hierarchicalTableToTree(data,'p','c').leafNodes().namePaths()"
     }
 ]

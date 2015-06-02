@@ -31,6 +31,11 @@ module.exports=[
         "file": "worldhealthplus.csv",
         "source": "./makeSampleData.html",
         "sourceDescription": "Combines World Bank data with MySQL sample data into an easier-to-use format."
+    },
+    {
+        "file": "tree.csv",
+        "source": "",
+        "sourceDescription": "Tiny taxonomy for testing. Transform to tree (and inspect) like: _.hierarchicalTableToTree(data,'p','c').leafNodes().namePaths()"
     }
 ]
 
@@ -28403,7 +28408,7 @@ module.exports = amdefine;
  */
 ; // jshint -W053
 
-'use strict()';
+'use strict';
 
 if (typeof require !== "undefined")
     var _ = require('lodash');
@@ -28428,7 +28433,7 @@ var supergroup = (function() {
      *
      * Avaailable as _.supergroup, Underscore mixin
      */
-    sg.group = function(recs, dim, opts) {
+    sg.supergroup = function(recs, dim, opts) {
         // if dim is an array, use multiDimList to create hierarchical grouping
         opts = opts || {};
         if (_(dim).isArray()) return sg.multiDimList(recs, dim, opts);
@@ -28513,7 +28518,7 @@ var supergroup = (function() {
     // nested groups, each dim is a level in hierarchy
     sg.multiDimList = function(recs, dims, opts) {
         opts.wasMultiDim = true;  // pretty kludgy
-        var groups = sg.group(recs, dims[0], opts);
+        var groups = sg.supergroup(recs, dims[0], opts);
         _.chain(dims).rest().each(function(dim) {
             groups.addLevel(dim, opts);
         }).value();
@@ -28573,6 +28578,9 @@ var supergroup = (function() {
         if (! ('lookupMap' in this)) {
             this.lookupMap = {};
             this.forEach(function(d) {
+                if (d in that.lookupMap)
+                    console.warn('multiple occurrence of ' + d + 
+                        ' in list. Lookup will only get the last');
                 that.lookupMap[d] = d;
             });
         }
@@ -28601,6 +28609,11 @@ var supergroup = (function() {
     List.prototype.addLevel = function(dim, opts) {
         _.each(this, function(val) {
             val.addLevel(dim, opts);
+        });
+    };
+    List.prototype.namePaths = function(opts) {
+        return _.map(this, function(d) {
+            return d.namePath(opts);
         });
     };
     // apply a function to the records of each group
@@ -28674,13 +28687,15 @@ var supergroup = (function() {
     Value.prototype.extendGroupBy = // backward compatibility
     Value.prototype.addLevel = function(dim, opts) {
         opts = opts || {};
-        _.each(this.leafNodes(), function(d) {
+        _.each(this.leafNodes() || [this], function(d) {
             opts.parent = d;
-            if (d.in && d.in === "both") {
-                d[childProp] = sg.diffList(d.from, d.to, dim, opts);
+            if (!('in' in d)) { // d.in means it's part of a diffList
+                d[childProp] = sg.supergroup(d.records, dim, opts);
             } else {
-                d[childProp] = sg.group(d.records, dim, opts);
-                if (d.in ) {
+                if (d.in === "both") {
+                    d[childProp] = sg.diffList(d.from, d.to, dim, opts);
+                } else {
+                    d[childProp] = sg.supergroup(d.records, dim, opts);
                     _.each(d[childProp], function(c) {
                         c.in = d.in;
                         c[d.in] = d[d.in];
@@ -28691,6 +28706,17 @@ var supergroup = (function() {
         });
     };
     Value.prototype.leafNodes = function(level) {
+        // until commit 31278a35b91a8f4bd4ddc4376c840fb14d2723f9
+        // supported level param, to only go down so many levels
+        // not supporting that any more. wasn't using it
+
+        if (!(childProp in this)) return;
+
+        return _.chain(this.descendants()).filter(
+                function(d){
+                    return !('children' in d)
+                }).addSupergroupMethods().value();
+
         var ret = [this];
         if (typeof level === "undefined") {
             level = Infinity;
@@ -28828,8 +28854,8 @@ var supergroup = (function() {
      * @memberof supergroup
      */
     sg.diffList = function(from, to, dim, opts) {
-        var fromList = sg.group(from.records, dim, opts);
-        var toList = sg.group(to.records, dim, opts);
+        var fromList = sg.supergroup(from.records, dim, opts);
+        var toList = sg.supergroup(to.records, dim, opts);
         var list = makeList(sg.compare(fromList, toList, dim));
         list.dim = (opts && opts.dimName) ? opts.dimName : dim;
         return list;
@@ -28957,6 +28983,27 @@ var supergroup = (function() {
         */
         return arr;
     }
+
+    sg.hierarchicalTableToTree = function(data, parentProp, childProp) {
+        // does not do the right thing if a value has two parents
+        // also, does not yet fix depth numbers
+        var parents = sg.supergroup(data,[parentProp, childProp]); // 2-level grouping with all parent/child pairs
+        var children = parents.leafNodes();
+        var topParents = _.filter(parents, function(parent) { 
+            var adoptiveParent = children.lookup(parent); // is this parent also a child?
+            if (adoptiveParent) { // if so, make it the parent
+                adoptiveParent.children = sg.addSupergroupMethods([]);
+                _.each(parent.children, function(c) { 
+                    c.parent = adoptiveParent; 
+                    adoptiveParent.children.push(c)
+                });  
+            } else { // if not, this is a top parent
+                return parent;
+            }
+            // if so, make use that child node, move this parent node's children over to it
+        });
+        return sg.addSupergroupMethods(topParents);
+    };
     return sg;
 }());
 
@@ -28976,12 +29023,14 @@ if (_.createAggregator) {
     var multiValuedGroupBy = function() { throw new Error("couldn't install multiValuedGroupBy") };
 }
 
-_.mixin({supergroup: supergroup.group, 
+_.mixin({
+    supergroup: supergroup.supergroup, 
     addSupergroupMethods: supergroup.addSupergroupMethods,
     multiValuedGroupBy: multiValuedGroupBy,
     sgDiffList: supergroup.diffList,
     sgCompare: supergroup.compare,
     sgCompareValue: supergroup.compareValue,
+    hierarchicalTableToTree: supergroup.hierarchicalTableToTree,
 });
 
 

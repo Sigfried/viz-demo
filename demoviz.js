@@ -3,8 +3,22 @@ Handlebars.partials = Handlebars.templates;
 
 content.query = queryString();
 content.vizChosen = content.query.viz;
+
 d3.json("/viz_list_configs", function(json) {
     content.vizLists = json;
+    if (content.vizChosen) {
+        content.vizConfig = _.find(content.vizLists,{dir:content.vizChosen});
+        if (content.vizConfig.vizParams) {
+            d3.select("#vizparam-div")
+                .append('p').text('Vis params');
+            d3.select("#vizparam-div")
+                .append("textarea")
+                    .attr('rows', 3)
+                    .attr('cols', 150)
+                    .attr('id','vizparams')
+                .text(content.vizConfig.vizParams)
+        }
+    }
 });
 
 d3.select('#datasets')
@@ -73,18 +87,13 @@ function transform() {
 }
 function runDemo() {
     var demoUrl = "/viz_content/" + content.vizChosen
-            + '/' +
-            _.find(content.vizLists,{dir:content.vizChosen})
-            .index;
-    var wnd = window.open(demoUrl, "Viz Demo Output", "_blank");
-    //wnd.document.write('<html><body><script>alert("hi")</script>hello</body></html>');
-    var qs = queryString();
+            + '/' + content.vizConfig.index;
     /*
-    var url = '/viz_content/' + qs.viz + '/runDemo' +
-        '?replace=jsonfile&with=worldhealth.csv
-        &transform=_.chain(data.slice(0,10)).                          map(function(d)%20{%20return%20_.chain(d).pairs().filter(function(p,i)%20{return%20%20i%20%3C%2010%20%26%26%20p[0].match(/^\d\d\d\d$/)}).map(function(p){return%20{x:       parseInt(p[0]),y:parseFloat(p[1])}}).value()%20}).value()
-    var a = document.createElement('a');
-    */
+    var p = d3.select("#vizparams").node().value;
+    if (p)
+        window.vizParams = eval( 'window.vizParams = ' + p);
+        */
+    var wnd = window.open(demoUrl, "Viz Demo Output", "_blank");
 }
 
 

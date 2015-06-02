@@ -13,3 +13,12 @@
 <div id="datasets"></div>
 <hr/>
 <div id="transforms"></div>
+<button onclick="transform()">Transform Data</button> 
+{{#if viz}}<button onclick="runDemo()">Run Demo</button>{{/if}}
+<br/>
+<textarea rows="15" cols="150" id="transform-code" style="border:1px solid black">
+</textarea>
+<hr/>
+<div id="vizparam-div"></div>
+<hr/>
+<pre id="output"></pre>

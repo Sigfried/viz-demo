@@ -1,9 +1,10 @@
 {
     "name": "Line chart lattice",
-    "index": "demo.html",
+    "index": "test.html",
     "author": "Sigfried Gold",
     "source": ".",
     "thumbnail": ".",
-    "dataExpected": "A table with three categorical fields and one numeric field"
+    "dataExpected": "A table with three categorical fields and one numeric field",
+    "vizParams": "{groupingFields: {row: 'field1', col: 'field2', line: 'field3', x: 'datefield'}, measureField: 'field4', aggFunc: d3.sum}"
 }
 
