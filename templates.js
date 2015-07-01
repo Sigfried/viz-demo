@@ -13,12 +13,9 @@ templates['home'] = template({"1":function(depth0,helpers,partials,data) {
 },"5":function(depth0,helpers,partials,data) {
     return "<button onclick=\"runDemo()\">Run Demo</button>";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, helper;
+    var stack1;
 
-  return "<a href=\"viz_list\">List visualization demos</a>\n\n"
-    + this.escapeExpression(((helper = (helper = helpers.wholequery || (depth0 != null ? depth0.wholequery : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"wholequery","hash":{},"data":data}) : helper)))
-    + "\n<hr/>\n"
-    + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.query : depth0)) != null ? stack1.viz : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.program(3, data, 0),"data":data})) != null ? stack1 : "")
+  return ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.query : depth0)) != null ? stack1.viz : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.program(3, data, 0),"data":data})) != null ? stack1 : "")
     + "<hr/>\n<div id=\"datasets\"></div>\n<hr/>\n<div id=\"transforms\"></div>\n<button onclick=\"transform()\">Transform Data</button> \n"
     + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.viz : depth0),{"name":"if","hash":{},"fn":this.program(5, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "\n<br/>\n<textarea rows=\"15\" cols=\"150\" id=\"transform-code\" style=\"border:1px solid black\">\n</textarea>\n<hr/>\n<div id=\"vizparam-div\"></div>\n<hr/>\n<pre id=\"output\"></pre>\n";
